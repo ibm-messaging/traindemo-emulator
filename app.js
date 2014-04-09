@@ -77,7 +77,7 @@ function publishMessage(id) {
     payload.light = 57.6;
     payload.distance = 50.98;
     var d = new Date();
-    payload.timestamp = d.toString();
+    payload.timestamp = d.toISOString();
     if (configMap[id].messagesPublished == 0) {
         // Publish start location
         payload.location = configMap[id].start;
