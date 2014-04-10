@@ -149,7 +149,7 @@ var http = require('http');
 
 var server = http.createServer(function(req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Hello World\n');
+    res.end('This is the TrainEmulator application\n');
 });
 server.listen(port, host);
 console.log('App started on port ' + port);
