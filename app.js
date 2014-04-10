@@ -13,6 +13,7 @@ var mqttServer = (process.env.mqttServer || '192.168.56.12');
 var mqttClient = mqtt.createClient(mqttPort, mqttServer);
 mqttClient.subscribe('TrainDemo/train/+/command');
 mqttClient.on('message', function (topic, message) {
+    console.log("Have got a message on topic " + topic);
     var topicParts = topic.split("/");
     var trainId = topicParts[2];
     if (trainId > 0) {
