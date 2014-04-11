@@ -70,13 +70,48 @@ function start_journey(start_station, end_station, id) {
     // Kick off the first run immediately
     publishFirstMessage(id);
 }
+
+function random_temperature() {
+    var min = 5;
+    var max = 60;
+
+    return Math.random() * (max - min) + min;
+}
+
+function random_weight() {
+    var min = 100;
+    var max = 600;
+
+    return Math.random() * (max - min) + min;
+}
+
+function random_light() {
+    var min = 100;
+    var max = 600;
+
+    return Math.random() * (max - min) + min;
+}
+
+function random_distance() {
+    var min = 20;
+    var max = 60;
+
+    return Math.random() * (max - min) + min;
+}
+
+function random_speed() {
+    var min = 20;
+    var max = 60;
+
+    return Math.random() * (max - min) + min;
+}
+
 function publishMessage(id) {
     var payload = {};
-    // Populate message apart from location and speed
-    payload.temperature = 17.3;
-    payload.weight = 509.92;
-    payload.light = 57.6;
-    payload.distance = 50.98;
+    payload.temperature = random_temperature();
+    payload.weight = random_weight();
+    payload.light = random_light();
+    payload.distance = random_distance();
     var d = new Date();
     payload.timestamp = d.toISOString();
     if (configMap[id].messagesPublished == 0) {
@@ -107,9 +142,7 @@ function publishMessage(id) {
             location.latitude = latitude.toFixed(6);
             location.longitude = longitude.toFixed(6);
             payload.location = location;
-            // Need to add support for commands to stop and start the train
-            // which will control the speed
-            payload.speed = 47.29;
+            payload.speed = random_speed();
             payload.status = 'moving';
             configMap[id].messagesPublished++;
         } else if (configMap[id].status == 'stopped') {
