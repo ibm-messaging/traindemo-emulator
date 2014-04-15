@@ -1,10 +1,9 @@
 {
-	"name": "NodejsStarterApp",
+	"name": "TrainEmulator",
 	"version": "0.0.1",
-	"description": "A sample nodejs app for BlueMix",
+	"description": "TrainEmulator as part of the Train Demo",
 	"dependencies": {
-		"express": "3.4.7",
-		"jade": "1.1.4"
+		"mqtt": "0.3.8"
 	},
 	"engines": {
 		"node": "0.10.0"
