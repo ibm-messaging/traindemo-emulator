@@ -8,9 +8,15 @@
  ******************************************************************************/
 
 var mqtt = require('mqtt');
-var mqttPort = (process.env.mqttPort || 1883);
-var mqttServer = (process.env.mqttServer || '192.168.56.12');
-var mqttClient = mqtt.createClient(mqttPort, mqttServer);
+
+// Read specified config file, or defaultConfig.js if none specified
+var configFileName = (process.env.CONFIG_FILE_NAME || 'defaultConfig.js');
+var configFilePath = "./config/" + configFileName;
+console.log("Reading config file " + configFilePath);
+var config = require(configFilePath);
+console.log("config: " + JSON.stringify(config));
+
+var mqttClient = mqtt.createClient(config.mqttPort, config.mqttServer);
 mqttClient.subscribe('TrainDemo/train/+/command');
 mqttClient.on('message', function (topic, message) {
     console.log("Have got a message on topic " + topic);
@@ -26,18 +32,10 @@ mqttClient.on('message', function (topic, message) {
       }
     }
 });
+
 var configMap = {};
 
-var stations = [
-    {"latitude":50.992717,"longitude":-1.493298}, // Romsey
-    {"latitude":51.067247,"longitude":-1.319999}, // Winchester
-    {"latitude":51.070636,"longitude":-1.806272}, // Salisbury
-    {"latitude":51.211563,"longitude":-1.492233}, // Andover
-    {"latitude":50.907377,"longitude":-1.414023}, // Southampton Central
-    {"latitude":50.796968,"longitude":-1.107684}, // Portsmouth Harbour
-];
-
-var number_of_stations = stations.length;
+var number_of_stations = config.stations.length;
 var start_station = null;
 var end_station = null;
 var id = 0;
@@ -46,10 +44,10 @@ var interval = (process.env.interval || 120000);
 var timeout = (process.env.timeout || 500);
 var iterations = (process.env.iterations || 200);
 for (var i = 0; i < number_of_stations; i++) {
-    start_station = stations[i];
+    start_station = config.stations[i];
     for (var j = 0; j < number_of_stations; j++) {
         if (i != j) {
-            end_station = stations[j];
+            end_station = config.stations[j];
             id++;
             start_journey(start_station, end_station, id);
         }
