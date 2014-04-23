@@ -40,9 +40,6 @@ var start_station = null;
 var end_station = null;
 var id = 0;
 
-var interval = (process.env.interval || 120000);
-var timeout = (process.env.timeout || 500);
-var iterations = (process.env.iterations || 200);
 for (var i = 0; i < number_of_stations; i++) {
     start_station = config.stations[i];
     for (var j = 0; j < number_of_stations; j++) {
@@ -59,11 +56,11 @@ function start_journey(start_station, end_station, id) {
     idConfig.start = start_station;
     idConfig.end = end_station;
     idConfig.messagesPublished = 0;
-    idConfig.latitudeDelta = (end_station.latitude - start_station.latitude) / iterations;
-    idConfig.longitudeDelta = (end_station.longitude - start_station.longitude) / iterations;
+    idConfig.latitudeDelta = (end_station.latitude - start_station.latitude) / config.iterations;
+    idConfig.longitudeDelta = (end_station.longitude - start_station.longitude) / config.iterations;
     configMap[id] = idConfig;
-    if (interval) {
-        setInterval(publishFirstMessage, interval, id);
+    if (config.interval) {
+        setInterval(publishFirstMessage, config.interval, id);
     }
     // Kick off the first run immediately
     publishFirstMessage(id);
@@ -119,8 +116,8 @@ function publishMessage(id) {
         payload.status = 'at_start_station';
         configMap[id].status = payload.status; // Store this to support commands
         configMap[id].messagesPublished++;
-        setTimeout(publishMessage, timeout, id);
-    } else if (configMap[id].messagesPublished == (iterations - 1)) {
+        setTimeout(publishMessage, config.timeout, id);
+    } else if (configMap[id].messagesPublished == (config.iterations - 1)) {
         // Publish end location
         payload.speed = 0;
         payload.status = 'at_end_station';
@@ -154,7 +151,7 @@ function publishMessage(id) {
             payload.speed = 0;
             payload.status = 'stopped';
         }
-        setTimeout(publishMessage, timeout, id);
+        setTimeout(publishMessage, config.timeout, id);
     }
     var message = JSON.stringify(payload);
     var topic = "TrainDemo/train/" + id + "/telemetry";
